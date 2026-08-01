@@ -1,0 +1,43 @@
+# ==================== IDE ====================
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==================== OS ====================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==================== Claude ====================
+.claude/
+
+# ==================== Logs ====================
+*.log
+logs/
+
+# ==================== Environment ====================
+.env
+.env.*
+!.env.example
+
+# ==================== Backend (Maven/Java) ====================
+target/
+*.class
+*.jar
+!*.jar.original
+*.war
+dependency-reduced-pom.xml
+
+# ==================== Frontend ====================
+node_modules/
+.next/
+out/
+dist/
+
+# ==================== Docker ====================
+docker-compose.override.yml
