@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
 
@@ -13,149 +12,68 @@ interface DashboardOverview {
   tagCount: number;
 }
 
+const quickLinks = [
+  { href: "/admin/articles/new", title: "写文章", desc: "创建一篇新文章" },
+  { href: "/admin/articles", title: "管理文章", desc: "编辑或删除已有文章" },
+  { href: "/admin/categories", title: "管理分类", desc: "组织文章分类结构" },
+  { href: "/admin/tags", title: "管理标签", desc: "管理文章标签" },
+  { href: "/admin/videos", title: "视频管理", desc: "管理视频内容" },
+  { href: "/admin/gallery", title: "相册管理", desc: "管理图片和图集" },
+];
+
 export default function DashboardPage() {
-  const router = useRouter();
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      router.push("/admin/login");
-      return;
-    }
-    loadOverview();
+    api.get<DashboardOverview>("/admin/dashboard/overview")
+      .then(setOverview)
+      .catch(() => setOverview({ articleCount: 0, publishedCount: 0, draftCount: 0, categoryCount: 0, tagCount: 0 }))
+      .finally(() => setLoading(false));
   }, []);
-
-  const loadOverview = async () => {
-    try {
-      const data = await api.get<DashboardOverview>("/admin/dashboard/overview");
-      setOverview(data);
-    } catch {
-      // handle error
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    router.push("/admin/login");
-  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-[50vh]">
         <p className="text-muted-foreground">加载中...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-border bg-card p-6 space-y-6">
-        <div>
-          <Link href="/admin/dashboard" className="text-xl font-bold">
-            何以晴
+    <div>
+      <h1 className="text-2xl font-bold mb-8">仪表盘</h1>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <StatCard label="文章总数" value={overview?.articleCount ?? 0} />
+        <StatCard label="已发布" value={overview?.publishedCount ?? 0} />
+        <StatCard label="草稿" value={overview?.draftCount ?? 0} />
+        <StatCard label="分类数" value={overview?.categoryCount ?? 0} />
+        <StatCard label="标签数" value={overview?.tagCount ?? 0} />
+      </div>
+
+      <h2 className="text-lg font-semibold mb-4">快捷入口</h2>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+        {quickLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="group rounded-xl border border-border p-4 transition-all hover:bg-accent hover:shadow-sm"
+          >
+            <h3 className="font-medium group-hover:text-primary transition-colors">{link.title}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{link.desc}</p>
           </Link>
-          <p className="text-xs text-muted-foreground">管理后台</p>
-        </div>
-        <nav className="space-y-1">
-          <NavLink href="/admin/dashboard" active>仪表盘</NavLink>
-          <NavLink href="/admin/articles">文章管理</NavLink>
-          <NavLink href="/admin/videos">视频管理</NavLink>
-          <NavLink href="/admin/gallery">相册管理</NavLink>
-          <NavLink href="/admin/audio">音乐管理</NavLink>
-          <NavLink href="/admin/novels">小说管理</NavLink>
-          <NavLink href="/admin/diary">日记管理</NavLink>
-          <NavLink href="/admin/memos">备忘录</NavLink>
-          <NavLink href="/admin/moments">说说管理</NavLink>
-          <NavLink href="/admin/friends">友链管理</NavLink>
-          <NavLink href="/admin/categories">分类管理</NavLink>
-          <NavLink href="/admin/tags">标签管理</NavLink>
-        </nav>
-        <button
-          onClick={handleLogout}
-          className="text-sm text-muted-foreground hover:text-foreground"
-        >
-          退出登录
-        </button>
-      </aside>
-
-      {/* Main */}
-      <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-8">仪表盘</h1>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="文章总数" value={overview?.articleCount ?? 0} />
-          <StatCard label="已发布" value={overview?.publishedCount ?? 0} />
-          <StatCard label="草稿" value={overview?.draftCount ?? 0} />
-          <StatCard label="分类数" value={overview?.categoryCount ?? 0} />
-        </div>
-
-        <div className="mt-8 grid gap-4">
-          <QuickLink
-            href="/admin/articles/new"
-            title="写文章"
-            desc="创建一篇新文章"
-          />
-          <QuickLink
-            href="/admin/articles"
-            title="管理文章"
-            desc="编辑或删除已有文章"
-          />
-          <QuickLink
-            href="/admin/categories"
-            title="管理分类"
-            desc="组织文章分类结构"
-          />
-          <QuickLink
-            href="/admin/tags"
-            title="管理标签"
-            desc="管理文章标签"
-          />
-        </div>
-      </main>
+        ))}
+      </div>
     </div>
   );
 }
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="text-3xl font-bold mt-1">{value}</p>
+    <div className="rounded-xl border border-border bg-card p-4 text-center">
+      <p className="text-3xl font-bold">{value}</p>
+      <p className="text-sm text-muted-foreground mt-1">{label}</p>
     </div>
-  );
-}
-
-function NavLink({ href, active, children }: { href: string; active?: boolean; children: React.ReactNode }) {
-  return (
-    <Link href={href}
-      className={`block rounded-md px-3 py-2 text-sm ${active ? 'bg-accent font-medium' : 'text-muted-foreground hover:bg-accent'}`}>
-      {children}
-    </Link>
-  );
-}
-
-function QuickLink({
-  href,
-  title,
-  desc,
-}: {
-  href: string;
-  title: string;
-  desc: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="block rounded-lg border border-border p-4 transition-colors hover:bg-accent"
-    >
-      <h3 className="font-medium">{title}</h3>
-      <p className="text-sm text-muted-foreground mt-1">{desc}</p>
-    </Link>
   );
 }

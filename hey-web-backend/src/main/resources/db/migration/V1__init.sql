@@ -16,7 +16,7 @@ CREATE TABLE t_user (
 -- 初始化站长账号 (密码: admin123)
 -- BCrypt hash generated for "admin123"
 INSERT INTO t_user (username, password, nickname, enabled) VALUES
-('admin', '$2a$10$EqCPQzBH1rUF3LiqBqwlL.6bMEXXa6FTmrPHmQKWzGXQbzjX5OWHC', '何以晴', 1);
+('admin', '$2b$10$0S0v.N/d4rzgOoiXNLLSmug1W/8fLV5ymprV9RktxSAI5dxGTmES2', '何以晴', 1);
 
 -- 分类表
 CREATE TABLE t_category (
