@@ -65,6 +65,11 @@ springdoc:
     path: /api-docs
   packages-to-scan: top.heyqing.heyweb.controller
 
+# OSS (当前本地存储，后续替换为阿里云 OSS / 腾讯云 COS)
+oss:
+  upload-dir: ${OSS_UPLOAD_DIR:uploads}
+  base-url: ${OSS_BASE_URL:http://localhost:8080/uploads}
+
 # Logging
 logging:
   level:

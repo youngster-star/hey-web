@@ -62,31 +62,19 @@ export default function DashboardPage() {
           </Link>
           <p className="text-xs text-muted-foreground">管理后台</p>
         </div>
-        <nav className="space-y-2">
-          <Link
-            href="/admin/dashboard"
-            className="block rounded-md bg-accent px-3 py-2 text-sm font-medium"
-          >
-            仪表盘
-          </Link>
-          <Link
-            href="/admin/articles"
-            className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent"
-          >
-            文章管理
-          </Link>
-          <Link
-            href="/admin/categories"
-            className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent"
-          >
-            分类管理
-          </Link>
-          <Link
-            href="/admin/tags"
-            className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent"
-          >
-            标签管理
-          </Link>
+        <nav className="space-y-1">
+          <NavLink href="/admin/dashboard" active>仪表盘</NavLink>
+          <NavLink href="/admin/articles">文章管理</NavLink>
+          <NavLink href="/admin/videos">视频管理</NavLink>
+          <NavLink href="/admin/gallery">相册管理</NavLink>
+          <NavLink href="/admin/audio">音乐管理</NavLink>
+          <NavLink href="/admin/novels">小说管理</NavLink>
+          <NavLink href="/admin/diary">日记管理</NavLink>
+          <NavLink href="/admin/memos">备忘录</NavLink>
+          <NavLink href="/admin/moments">说说管理</NavLink>
+          <NavLink href="/admin/friends">友链管理</NavLink>
+          <NavLink href="/admin/categories">分类管理</NavLink>
+          <NavLink href="/admin/tags">标签管理</NavLink>
         </nav>
         <button
           onClick={handleLogout}
@@ -140,6 +128,15 @@ function StatCard({ label, value }: { label: string; value: number }) {
       <p className="text-sm text-muted-foreground">{label}</p>
       <p className="text-3xl font-bold mt-1">{value}</p>
     </div>
+  );
+}
+
+function NavLink({ href, active, children }: { href: string; active?: boolean; children: React.ReactNode }) {
+  return (
+    <Link href={href}
+      className={`block rounded-md px-3 py-2 text-sm ${active ? 'bg-accent font-medium' : 'text-muted-foreground hover:bg-accent'}`}>
+      {children}
+    </Link>
   );
 }
 
