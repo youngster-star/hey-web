@@ -40,6 +40,16 @@ export default function AdminArticlesPage() {
     load();
   };
 
+  const handleToggleVisible = async (a: Article) => {
+    await api.put(`/admin/articles/${a.id}`, { title: a.title, slug: a.slug, status: a.status, visible: !a.visible, pinned: a.pinned });
+    load();
+  };
+
+  const handleTogglePinned = async (a: Article) => {
+    await api.put(`/admin/articles/${a.id}`, { title: a.title, slug: a.slug, status: a.status, visible: a.visible, pinned: !a.pinned });
+    load();
+  };
+
   useEffect(() => { load(); }, []);
 
   return (
@@ -73,8 +83,12 @@ export default function AdminArticlesPage() {
                 <tr key={a.id} className="border-t border-border">
                   <td className="px-4 py-3 font-medium">{a.title}</td>
                   <td className="px-4 py-3">{STATUS_MAP[a.status] ?? a.status}</td>
-                  <td className="px-4 py-3">{a.visible ? "✅" : "❌"}</td>
-                  <td className="px-4 py-3">{a.pinned ? "📌" : "-"}</td>
+                  <td className="px-4 py-3">
+                    <button onClick={() => handleToggleVisible(a)} className="text-sm">{a.visible ? "✅" : "❌"}</button>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button onClick={() => handleTogglePinned(a)} className="text-sm">{a.pinned ? "📌" : "-"}</button>
+                  </td>
                   <td className="px-4 py-3">{a.clickCount}</td>
                   <td className="px-4 py-3">{a.likeCount}</td>
                   <td className="px-4 py-3 text-muted-foreground">{a.updateTime?.slice(0, 10)}</td>

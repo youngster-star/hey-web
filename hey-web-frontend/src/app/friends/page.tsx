@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
 interface FriendLink { id: number; name: string; url: string; description: string; logo: string; }
 
 export default function FriendsPage() {
@@ -22,6 +22,7 @@ export default function FriendsPage() {
         </div>
       </header>
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "友链" }]} />
         <h1 className="text-3xl font-bold mb-8">友情链接</h1>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {links.map((l) => (

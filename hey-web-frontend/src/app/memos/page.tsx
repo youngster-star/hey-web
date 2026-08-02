@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
 interface Memo { id: number; title: string; content: string; completed: boolean; }
 
 export default function MemosPage() {
@@ -22,6 +22,7 @@ export default function MemosPage() {
         </div>
       </header>
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "备忘录" }]} />
         <h1 className="text-3xl font-bold mb-8">备忘录</h1>
         <div className="space-y-3">
           {memos.map((m) => (

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { ChevronRight, Home } from "lucide-react";
 
 const navItems = [
   { href: "/admin/dashboard", label: "仪表盘" },
@@ -39,6 +40,42 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     localStorage.removeItem("refreshToken");
     router.push("/admin/login");
   };
+
+  // 自动生成面包屑（必须在所有条件 return 之前调用）
+  const labelMap: Record<string, string> = {
+    admin: "管理后台",
+    dashboard: "仪表盘",
+    articles: "文章管理",
+    new: "新建",
+    videos: "视频管理",
+    gallery: "相册管理",
+    audio: "音乐管理",
+    novels: "小说管理",
+    diary: "日记管理",
+    memos: "备忘录",
+    moments: "说说管理",
+    friends: "友链管理",
+    categories: "分类管理",
+    tags: "标签管理",
+    statistics: "访问统计",
+  };
+  const breadcrumbs = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    const crumbs: { label: string; href?: string }[] = [];
+    let accumulated = "";
+    for (const seg of segments) {
+      accumulated += "/" + seg;
+      const label = labelMap[seg] ?? seg;
+      if (seg === "admin") {
+        crumbs.push({ label, href: "/admin/dashboard" });
+      } else if (seg === segments[segments.length - 1]) {
+        crumbs.push({ label });
+      } else {
+        crumbs.push({ label, href: accumulated });
+      }
+    }
+    return crumbs;
+  }, [pathname]);
 
   // 登录页不显示侧边栏
   if (pathname === "/admin/login") {
@@ -88,7 +125,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main */}
-      <main className="flex-1 p-8 min-w-0">{children}</main>
+      <main className="flex-1 p-8 min-w-0">
+        {/* Breadcrumb */}
+        <nav aria-label="面包屑" className="mb-6">
+          <ol className="flex items-center gap-1.5 text-sm text-muted-foreground flex-wrap">
+            <li>
+              <Link href="/" className="hover:text-foreground transition-colors inline-flex items-center gap-1">
+                <Home className="size-3.5" />
+              </Link>
+            </li>
+            {breadcrumbs.map((crumb, i) => (
+              <li key={i} className="flex items-center gap-1.5">
+                <ChevronRight className="size-3.5 shrink-0" />
+                {crumb.href ? (
+                  <Link href={crumb.href} className="hover:text-foreground transition-colors truncate max-w-[200px]">
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span className="text-foreground font-medium truncate max-w-[200px]">{crumb.label}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+        {children}
+      </main>
     </div>
   );
 }

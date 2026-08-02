@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
 interface ImageGroup {
   id: number; title: string; slug: string; description: string;
   coverImage: string; clickCount: number; likeCount: number; createTime: string;
@@ -31,6 +31,7 @@ export default function GalleryPage() {
         </div>
       </header>
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "相册" }]} />
         <h1 className="text-3xl font-bold mb-8">相册</h1>
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
           {groups.map((g) => (

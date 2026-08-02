@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api, type PageResult } from "@/lib/api";
+import { Breadcrumb } from "@/components/common/breadcrumb";
+import { LikeButton } from "@/components/common/like-button";
 
 interface Article {
   id: number;
@@ -58,6 +60,7 @@ export default function ArticlesPage() {
 
       {/* Article List */}
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "文章" }]} />
         <h1 className="text-3xl font-bold mb-8">文章</h1>
 
         {articles.length === 0 ? (
@@ -96,6 +99,7 @@ export default function ArticlesPage() {
                           )}
                         </time>
                         <span>{article.clickCount} 次阅读</span>
+                        <LikeButton targetType="article" targetId={article.id} />
                       </div>
                     </div>
                   </div>

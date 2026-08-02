@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
+import { LikeButton } from "@/components/common/like-button";
 interface Video {
   id: number; title: string; slug: string; summary: string;
   coverImage: string; source: string; duration: string;
@@ -21,6 +22,7 @@ export default function VideosPage() {
     <div className="flex flex-col flex-1">
       <Header />
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "视频" }]} />
         <h1 className="text-3xl font-bold mb-8">视频</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((v) => (
@@ -35,6 +37,7 @@ export default function VideosPage() {
                   {v.summary && <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{v.summary}</p>}
                   <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                     <span>{v.clickCount} 次播放</span>
+                    <LikeButton targetType="video" targetId={v.id} />
                     <span>{v.source}</span>
                   </div>
                 </div>

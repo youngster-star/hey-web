@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
 interface Audio {
   id: number; title: string; slug: string; artist: string;
   album: string; coverImage: string; duration: string; url: string;
@@ -33,6 +33,7 @@ export default function AudioPage() {
         </div>
       </header>
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "音乐" }]} />
         <h1 className="text-3xl font-bold mb-8">音乐</h1>
         <div className="space-y-2">
           {audios.map((a) => (

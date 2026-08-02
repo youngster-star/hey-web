@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Breadcrumb } from "@/components/common/breadcrumb";
 
 export default function AboutPage() {
   return (
@@ -20,6 +21,7 @@ export default function AboutPage() {
       </header>
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-16">
+        <Breadcrumb items={[{ label: "关于" }]} />
         <h1 className="text-3xl font-bold mb-8">关于我</h1>
         <div className="prose dark:prose-invert space-y-4">
           <p className="text-muted-foreground">
@@ -28,6 +30,17 @@ export default function AboutPage() {
           <p className="text-muted-foreground">
             通过这个网站，我希望分享有价值的内容，同时也作为自己成长的见证。
           </p>
+        </div>
+
+        {/* Admin entrance */}
+        <div className="mt-16 pt-8 border-t border-border">
+          <Link
+            href="/admin/dashboard"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ⚙️ 管理后台
+          </Link>
         </div>
       </main>
     </div>

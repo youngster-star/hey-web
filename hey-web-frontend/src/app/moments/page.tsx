@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
+import { LikeButton } from "@/components/common/like-button";
 interface Moment {
   id: number; content: string; images: string;
   clickCount: number; likeCount: number; createTime: string;
@@ -29,6 +30,7 @@ export default function MomentsPage() {
         </div>
       </header>
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "说说" }]} />
         <h1 className="text-3xl font-bold mb-8">说说</h1>
         <div className="space-y-6">
           {moments.map((m) => {
@@ -45,7 +47,7 @@ export default function MomentsPage() {
                 )}
                 <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground">
                   <time>{new Date(m.createTime).toLocaleDateString("zh-CN")}</time>
-                  <span>{m.likeCount} 赞</span>
+                  <LikeButton targetType="moment" targetId={m.id} />
                 </div>
               </article>
             );

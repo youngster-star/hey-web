@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-
+import { Breadcrumb } from "@/components/common/breadcrumb";
+import { LikeButton } from "@/components/common/like-button";
 interface Novel {
   id: number; title: string; slug: string; summary: string;
   coverImage: string; author: string; clickCount: number; createTime: string;
@@ -29,6 +30,7 @@ export default function NovelsPage() {
         </div>
       </header>
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12">
+        <Breadcrumb items={[{ label: "小说" }]} />
         <h1 className="text-3xl font-bold mb-8">小说</h1>
         <div className="grid gap-6">
           {novels.map((n) => (
@@ -38,7 +40,10 @@ export default function NovelsPage() {
                 <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">{n.title}</h3>
                 {n.author && <p className="text-sm text-muted-foreground mt-1">{n.author}</p>}
                 {n.summary && <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{n.summary}</p>}
-                <p className="text-xs text-muted-foreground mt-2">{n.clickCount} 次阅读</p>
+                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                  <span>{n.clickCount} 次阅读</span>
+                  <LikeButton targetType="novel" targetId={n.id} />
+                </div>
               </div>
             </Link>
           ))}
