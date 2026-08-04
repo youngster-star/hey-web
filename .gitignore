@@ -39,5 +39,9 @@ node_modules/
 out/
 dist/
 
+# ==================== Redis ====================
+dump.rdb
+start-redis.bat
+
 # ==================== Docker ====================
 docker-compose.override.yml
